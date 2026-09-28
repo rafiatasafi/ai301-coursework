@@ -1,4 +1,4 @@
-Environment: macOS 23.6.0 (arm64), Python 3.13.2, passlib 1.7.4, bcrypt 4.3.0, repo at commit `2f4e82f` (my fork, matches upstream `main` at time of testing). Set up with `python3 -m venv .venv` + `pip install -e ".[dev]"` — didn't need Docker/Postgres/Redis running for this, since `core.security` and `core.config` don't touch the DB at import time.
+Environment: macOS 14.6 (Sonoma, arm64), Python 3.13.2, passlib 1.7.4, bcrypt 4.3.0, repo at commit `2f4e82f` (my fork, matches upstream `main` at time of testing). Set up with `python3 -m venv .venv` + `pip install -e ".[dev]"` — didn't need Docker/Postgres/Redis running for this, since `core.security` and `core.config` don't touch the DB at import time.
 
 Steps:
 
