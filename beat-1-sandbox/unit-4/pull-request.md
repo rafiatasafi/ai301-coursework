@@ -15,15 +15,11 @@ label is not graded.
 
 **Pull request**
 
-[Link to the pull request you opened. It must be the pull request's own page on the Path
-Review repo, not your fork's branch page.]
+https://github.com/codepath/pathreview-ai301-fa26-s3/pull/110
 
 **Branch**
 
-[The name of the branch the pull request comes from, exactly as it appears in your fork.
-The naming shape is a type prefix, then the issue number, then a short description. **The
-issue number in the branch name must be the number of the issue the pull request fixes** —
-a name carrying any other number does not satisfy this field.]
+fix/72-verify-password-fail-closed
 
 ## Eval iterations
 
@@ -32,28 +28,26 @@ fields.
 
 **Run history**
 
-[The agreement score of each run you did, in order. A single run is a complete answer if
-only one run occurred. **The last score in your list must match the agreement line in the
-`eval-run.txt` you committed** — that file is the record of your final run.]
+1. Full run, `--save-run eval-run.txt`: `agreement: 13/20 scored items (bar: 18/20: below the bar; category floor unmet: no match in clear-accept)`
+2. `--only pkg-02,pkg-08` (diagnostic, no files changed): `agreement: 1/2` — pkg-02 passed (model variance from the full run, where it had also failed on `evidence-demonstrates-fix` with no later change); pkg-08 failed again, isolating the cause to `repo-checks-run-and-honestly-reported` specifically, not `evidence-demonstrates-fix`
 
 **Package analysis**
 
-[Pick one scored package (`pkg-01` through `pkg-20` — the four `calib-` packages are never
-scored). Name it by id, say what your rubric decided and what the gold label said, and
-explain why your rubric read it that way.]
+pkg-08: my rubric's final verdict is `reject`; the gold label is `accept`; they disagree.
+
+The failing check, `repo-checks-run-and-honestly-reported`, found that the PR's Requirements section states "code formatted" with no pasted gofmt or lint output anywhere in the description or test evidence — unlike the tests and integration-test checklist items in the same PR, which do have pasted command output ("go test" and the integration test run). My check's pass condition treats every template checklist item identically: it requires pasted command output for each one, with no pasted output counting as "silently skipped." But "code formatted" in this repo's template reads more like a self-attested tick-box (did you run your formatter before committing) than a "run this and show me" item the way the test checks are. Gold treats this PR as ready; my rubric can't currently tell the difference between a checklist item that demands pasted output and one that's a self-attestation, so it fails every PR that completes the self-attestation item honestly without extra proof — which turned out to affect every clear-accept package in the set, not just this one.
 
 **Check rationale**
 
-[Quote one check from the `rubric.md` you uploaded to `tools/pr-precheck/`, exactly as it reads now.
-Then say why it reads that way — what you revised to get there, or what you rejected in
-favour of it.]
+The current pass condition for `repo-checks-run-and-honestly-reported` reads:
+
+> "Pass if every required check was actually run and its real result pasted, including an honestly-reported failure with a stated reason; fail if a required check is silently skipped, or its result is asserted without pasted output, or a failure is hidden"
+
+It reads this way because the honest-outcome principle from weeks 2 and 3 (an evidenced cannot-reproduce or an honestly-reported failure still passes; an unsubstantiated success claim does not) needed a PR-level equivalent: a checklist that's ticked without evidence is the PR version of a confident claim with nothing behind it. I wrote it to require pasted output uniformly across every checklist item, on the assumption that any claimed check is equally verifiable by its output — which turned out to be false for at least one item ("code formatted") in at least one repo's template.
 
 **Trade-offs**
 
-[Every check gives something up. Any one of these is a complete answer: a package whose
-result it changes, a canary you re-ran with `--only`, a case you accept it will miss, or a
-stated reason nothing changed elsewhere. "Nothing changed, and here is how I know" earns
-the point in full when the reason follows.]
+Requiring pasted output for every checklist item, with no distinction for a self-attested one, costs exactly what the eval run shows: a uniform fail across all 7 clear-accept packages, the one category where the bar explicitly can't be bought back on volume. The check correctly catches an unsubstantiated test claim (which is the failure mode it was built for, and which none of the reject-category packages slipped past), but it can't yet distinguish that from an honestly-ticked self-attestation item with no command to paste output from. A looser version — pasted output required only for checklist items that name a runnable command, pass-by-ticking accepted for ones that don't — would likely recover the clear-accept category without reopening the honest-outcome gap, but confirming that costs another full run, which this submission doesn't spend on.
 
 ---
 
