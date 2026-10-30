@@ -73,11 +73,10 @@ Gather all seven before grading any of them:
    Grade `unclear` only when the package gives nothing to gather at
    all for that check (no scope stated, no description content, no
    test evidence section) — not when what's there is merely terse.
-3. For `diff-within-plan-scope`, `evidence-demonstrates-fix`, and
-   `repo-checks-run-and-honestly-reported`: a disclosed, reasoned gap
-   (recorded in `## Deviations`, or an honestly-reported failing check
-   with a stated reason) grades `pass` on that specific point, not
-   `fail`. An undisclosed gap of the same kind grades `fail`.
+3. Apply the disclosed-gap exception exactly as `rubric.md`'s verdict
+   rule states it, for the three checks it names there. Do not
+   re-derive or restate the condition here -- if the exception's
+   wording ever needs to change, it changes in `rubric.md` only.
 4. Once a check's evidence is gathered per Evidence gathering, grade
    it from that record; do not re-read the whole package per check.
 5. For every grade, record the one fact that decided it: a quoted
