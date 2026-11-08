@@ -55,10 +55,9 @@ happened; these entries are the toolkit's own timeline.
 All four entries are graded. Keep every heading below, and fill each
 one in the week it belongs to.
 
-**Unit 5: [one line on the tool work]**
+**Unit 5: Built issue-scout by upgrading my unit 1 issue-select skill for real repos and running it on a live search.**
 
-[2-4 sentences: what you built (the scout, your strategy), what broke
-or fell short, what changed because of it.]
+I renamed issue-select to issue-scout, replaced its sandbox scope with my real-world fit profile (Python/Flask, Next.js/React Native, Supabase -- avoiding CI/DevOps work), and wrote search-strategy.md with five gh search issues queries plus ranking filters (drop assigned/stale candidates, order by fewest comments first). My first scan graded 5 candidates and caught a real rubric bug: not-already-claimed was passing issues where a linked PR had already merged the requested work, because my pass condition only checked for open PRs and assignees, not merged ones. I rewrote the check to also fail on a merged PR and logged the fix with a dated entry in scan-notes.md, then confirmed it held up when re-grading DrumBeatRepo#270 -- the scout correctly flagged it with a tension (a standing "not meant to be closed" issue) instead of a false accept.
 
 **Unit 6: [one line on the tool work]**
 
