@@ -78,24 +78,18 @@ drafted, what you did with the draft.]
 
 ## Why I Chose This Issue
 
-[1-2 paragraphs in your own words: how you searched, what your scan
-surfaced, what your scout's verdict said, why this issue fits your
-profile, and what you hope to learn. If your scout's verdict on it
-was reject and you chose it anyway, say so here and say why; choosing
-against your own tool silently is what loses points. Close with an
-honest read of the tool itself: where the scout fell short on a real
-wild search and what you changed or would change, or what convinced
-you it held up. **Record the link to your claim comment in this section too.**
-Not claimed yet? Write `claim pending` and today's date where the link goes,
-and add the link the moment your claim lands.]
+I found this issue through the required AI301 Issue Selection site, filtered to my profile (Python/Flask, TypeScript/React, Supabase). DrumBeatRepo#270 is a standing "add a drum beat" invitation carrying a good first issue label, and my issue-scout graded it accept, with one tension flagged under scope-feasible: the issue is explicitly "not meant to be closed," so it's a perpetual invitation rather than a task that finishes, though each beat genre is still its own bounded piece of work. The difficulty note came back straightforward: the issue names exactly where the change lives (a JSON file under frontend/src/assets/beats/<genre>/ plus a beat-metadata.json entry), and I'm adding Jazz specifically, reusing the repo's existing samples. It's a frontend/TypeScript codebase (Angular, not React, but close enough to my Next.js/React work that reading the existing beat schema was quick), and it's small enough to finish cleanly in the weeks I have. I hope to learn how a real maintainer actually responds to a first-time contributor's claim, since my units 1-4 work was entirely against a classroom sandbox.
+
+My scout's grading history on this issue is itself the most honest story about the tool: after I posted my claim comment, I re-graded the issue and the scout came back reject -- not because anything about the issue had changed, but because its not-already-claimed check read my own successful claim comment (and the maintainer's approving reply) as evidence someone else had already taken the work. That's a real rubric bug: the check was written to catch a stranger beating me to an issue, with no exemption for my own account. I fixed it by excluding comments, assignees, and linked PRs that are mine from the "already claimed" condition, logged the fix in scan-notes.md, and re-ran the grade -- it came back accept again, correctly. That's the second rubric bug this scout has caught and fixed against real repos (the first was not-already-claimed also missing a merged-PR case, in my very first scan), which is exactly the pattern I expected moving from a seeded sandbox to the wild: it under-handles cases the classroom's tidy issues never exercised, but each miss has been catchable and fixable once I actually ran it against something real.
+
+Claim comment: https://github.com/Babali42/DrumBeatRepo/issues/270#issuecomment-6725907234
 
 **Toolkit**
 
-- Tool: issue-scout (your scout: your search strategy, your rubric),
-  and how you used it
-- What it produced: [the scan and its verdict on this issue, described]
-- Difficulties: [where it fell short, or "none met" if none did]
-- What changed: [what you patched or would update, or "nothing"]
+- Tool: issue-scout (my search strategy, my rubric), used to grade DrumBeatRepo#270 both before and after claiming it
+- What it produced: an initial accept with a scope-feasible tension (standing issue, perpetual invitation) and a straightforward difficulty note; then, after I claimed it, a reject caused entirely by a rubric bug in not-already-claimed misreading my own claim as a competing one
+- Difficulties: not-already-claimed had no exemption for my own account, so a successful claim looked identical to a stranger beating me to it
+- What changed: added an exemption so comments, assignees, and linked PRs that are mine never fail that check; logged it with a dated line in scan-notes.md
 
 ---
 
