@@ -95,26 +95,39 @@ Claim comment: https://github.com/Babali42/DrumBeatRepo/issues/270#issuecomment-
 
 **Problem Description**
 
-[In your own words, what is broken or missing?]
+DrumBeatRepo has no Jazz entry in its drum-pattern catalog. Issue #270
+is a standing invitation to add missing genres, and Jazz is one that's
+never been contributed.
 
 **Expected Behavior**
 
-[What should happen?]
+Selecting "Jazz" from the genre dropdown should load and play a
+jazz-style drum pattern, the same way every other genre does.
 
 **Current Behavior**
 
-[What actually happens?]
+"Jazz" doesn't exist in `beats-metadata.json` or as a beat file, so
+there's no way to select or play it at all.
 
 **Affected Components**
 
-[Which parts of the codebase are involved?]
+`frontend/src/assets/beats/beats-metadata.json` (the catalog) and a
+new `frontend/src/assets/beats/jazz/jazz.json`. No TypeScript or Scala
+code: `BeatLibrary.scala` and `HttpBeatLoader.scala` load genres
+generically, with no allowlist to update.
 
 **Toolkit**
 
-- Tool:
-- What it produced:
-- Difficulties:
-- What changed:
+- Tool: a scoped orientation pass (Claude Code, feeding CLAUDE.local.md)
+- What it produced: identified `BeatLibrary.scala`/`HttpBeatLoader.scala`
+  as the only two files that touch beat loading, and confirmed neither
+  has a genre allowlist
+- Difficulties: my first orientation prompt, scoped only to the
+  TypeScript assets/domain folders, came back empty -- the real
+  loading logic lives in the Scala engine, not the frontend
+- What changed: widened the orientation to grep across all of
+  `frontend/src` for `beats-metadata` and `domain/beat` imports, which
+  found the real pipeline
 
 ---
 
@@ -212,29 +225,81 @@ frontend/src/assets/sounds/trap/{{hat,kick,snare}}.mp3
 
 **Analysis**
 
-[Your analysis of the root cause: what is causing the issue, traced
-to the files and functions involved.]
+DrumBeatRepo#270 asks contributors to add missing drum-pattern genres.
+Jazz has no entry anywhere: `beats-metadata.json` has no "jazz" key,
+and there's no `jazz/` folder under `frontend/src/assets/beats/`.
+`BeatLibrary.scala` (catalog loader) and `HttpBeatLoader.scala`
+(per-beat loader) have no genre allowlist or switch statement -- any
+metadata entry with a matching JSON file loads automatically, so this
+is purely a data addition, not a code change.
 
 **Proposed Solution**
 
-[High-level description of your fix approach, and what you are
-deliberately NOT changing.]
+Add two files:
+1. `frontend/src/assets/beats/jazz/jazz.json` -- the beat pattern
+   itself, matching the existing `Beat` schema (label, genre, bpm,
+   beatsPerBar, subdivisionsPerBeat, numberOfBar, tracks).
+2. A new entry in `frontend/src/assets/beats/beats-metadata.json`:
+   `{"filename": "jazz/jazz", "genre": "Jazz", "label": "Jazz"}`.
+
+The pattern uses a 12-step triplet grid (4 beats x 3 subdivisions per
+beat, same approach the existing psytrance beat already uses) instead
+of straight 16ths, to get an authentic swung feel: a classic ride
+"ding, ding-a-ding" accent pattern, a light kick on beats 1 and 3, a
+soft snare comp on the ride's swung upbeats, and a hi-hat pedal on
+beats 2 and 4.
+
+No existing audio sample in the repo is a ride cymbal. I'm
+substituting `ebm/open-hihat.wav` for the ride part, since a sustained
+open hi-hat is the closest available texture to a ride's wash, and
+I'll disclose this substitution explicitly in the PR description
+rather than present it as an authentic ride sound.
+
+Deliberately not changing: any `.ts` or `.scala` source file, any
+other genre's existing beat file or metadata entry, or any test file
+(the existing Scala/TS specs cover catalog parsing and sequencer
+behavior generically with their own fixtures, not specific genre
+content).
 
 **Implementation Plan**
 
-1. [Modify file X to do Y]
-2. [Add or change Z]
-3. [Update tests]
-
-[Record deviations here as they happen: what changed mid-build and
-why. A recorded deviation is honest work; silent drift is not.]
+1. Add `frontend/src/assets/beats/jazz/jazz.json`.
+2. Add the matching entry to `beats-metadata.json`.
+3. Run `npm run lint`, `npm run test-vitest-coverage`, and
+   `bash verify_i18n_json.sh` from `frontend/` (per ship-manifest.md)
+   to confirm nothing elsewhere broke.
+4. Verify the addition itself, concretely and unconditionally (none
+   of these need sbt, which isn't installed locally):
+   - `grep -i jazz frontend/src/assets/beats/beats-metadata.json`
+     prints the new entry (before: empty).
+   - `node -e "JSON.parse(require('fs').readFileSync('frontend/src/assets/beats/jazz/jazz.json'))"`
+     exits 0 -- confirms the file is valid JSON.
+   - Each track's `steps` string is exactly 12 characters
+     (beatsPerBar 4 x subdivisionsPerBeat 3 x numberOfBar 1 = 12).
+   - Each track's `filename` points at a file that actually exists
+     under `frontend/src/assets/sounds/`.
+   - Optional, only if sbt becomes available: `npm run start` lists
+     Jazz in the dropdown and plays it.
 
 **Toolkit**
 
-- Tool:
-- What it produced:
-- Difficulties:
-- What changed:
+- Tool: plan-check, grading plan.md and plan-comment.md together
+- What it produced: an initial reject on test-plan-targets-and-observable
+  -- my first test plan was conditional ("if the local environment
+  allows") with no concrete pass/fail outcome, since the existing
+  specs don't cover genre content at all. After rewriting it as four
+  concrete, unconditional checks (grep, JSON.parse exit code, step
+  length, sample-file existence), it came back accept.
+- Difficulties: it's easy to leave testing vague when the underlying
+  fix is "just data" -- I had to be deliberate about writing testable
+  success criteria instead of a soft, conditional step. plan-check
+  also caught that my plan comment had silently dropped two real
+  risks: that I can't verify live playback without sbt, and that my
+  maintainer question about the ride substitution was still
+  unanswered.
+- What changed: rewrote the Implementation Plan's testing step as four
+  concrete commands with pass/fail outcomes, and added both omitted
+  risks to plan-comment.md.
 
 ---
 
