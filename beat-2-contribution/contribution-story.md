@@ -305,39 +305,80 @@ content).
 
 ## Testing Strategy
 
-[What observable checks prove the fix: your reproduction steps re-run
-against the built change (before and after), and the repo's own test
-suite or checks with the outcome shown. "Tests pass" with nothing
-observable named is not a strategy.]
+Re-running my reproduction's grep against this branch now prints the
+new entry (before: empty, after: `{"filename": "jazz/jazz", "genre":
+"Jazz", "label": "Jazz"}`). Beyond that, four structural checks
+confirm the addition is well-formed: the JSON parses, each track's
+`steps` string is exactly 12 characters, and every referenced sample
+file exists under `frontend/src/assets/sounds/`. Full output is in
+test_evidence.md.
+
+The repo's own checks that I can run locally all pass: `npm run lint`
+(clean), `npm run test-vitest-coverage` (29/29), and
+`bash verify_i18n_json.sh` (all 9 locales consistent). Two checks
+(Scala tests and Angular/Karma tests) are excluded in ship-manifest.md
+because they need `sbt`, which isn't installed locally -- documented
+there with today's date and the reason, not silently skipped.
+
+Known limitation, disclosed in my PR: without sbt I can't run the app
+itself, so I haven't confirmed Jazz actually plays correctly
+end-to-end (dropdown listing, audio playback, sequencer timing) --
+only that the data is structurally valid and complete.
 
 **Toolkit**
 
-- Tool:
-- What it produced:
-- Difficulties:
-- What changed:
+- Tool: ship-manifest.md, the checklist I wrote in unit 7 naming which
+  of the repo's CI checks to run locally before a PR
+- What it produced: a clear split between what I could verify locally
+  (lint, vitest, i18n, plus four structural checks of my own) and what
+  I couldn't (Scala tests and Karma, both blocked by the same missing
+  sbt installation)
+- Difficulties: discovering that Karma indirectly also needs the Scala
+  build output (`frontend/engine/main.js`), not just lint/vitest,
+  meant more of the manifest's checks had to move to the excluded
+  table than I expected starting out
+- What changed: rather than treat two unavailable checks as a gap to
+  shrug off, I added four unconditional structural checks of my own
+  (from plan-check's feedback in unit 7) to cover what the unavailable
+  checks would have verified, so the fix isn't resting only on "tests
+  pass" where tests could run
 
 ---
 
 ## Implementation Notes
 
-[A running log, added to as you work. Date each entry. What you
-built, decisions you made when you made them, wrong turns included.]
+**2026-11-08**
 
-**[Date]**
+Decided on a 12-step triplet grid (subdivisionsPerBeat: 3) instead of
+straight 16ths, after confirming `psytrance-ternary.json` already uses
+the same approach -- wanted an authentic swung ride feel rather than
+inventing an unprecedented schema shape.
 
-[Entry]
+**2026-11-08**
 
-**[Date]**
+My first attempt at the `beats-metadata.json` edit used Python's
+`json.dump`, which reformatted the whole file (2-space indent vs. the
+file's actual 4-space indent) -- a 280-line diff for what should've
+been a one-entry addition. Caught it by checking `git show --stat`
+before pushing, reverted, and did a minimal text-based insert instead,
+landing a 5-line diff.
 
-[Entry]
+**2026-11-08**
+
+Confirmed via `npm run test-ci` that Karma (not just the Scala build
+itself) also needs `frontend/engine/main.js` to exist, so both Scala
+tests and Karma tests had to move to ship-manifest.md's excluded table
+together, for the same root cause (sbt not installed locally).
 
 **Toolkit**
 
-- Tool:
-- What it produced:
-- Difficulties:
-- What changed:
+- Tool: CLAUDE.local.md, my repo-memory file from unit 6
+- What it produced: the exact schema fields and file-path conventions
+  on hand throughout the build, without re-deriving them each session
+- Difficulties: none during the actual build -- the schema and no-
+  allowlist facts it held were accurate and sufficient
+- What changed: nothing added to it this round; the fix needed no
+  exploration beyond what the unit 6 orientation already found
 
 ---
 
