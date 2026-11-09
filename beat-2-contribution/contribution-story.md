@@ -389,9 +389,10 @@ together, for the same root cause (sbt not installed locally).
 
 **Maintainer Feedback:**
 
-- 2026-11-08: none yet (just opened)
+- 2026-11-08: CodeRabbit (automated review bot) left 2 inline comments and 1 nitpick on the first commit (c7e8a516): a Hi-Hat midiNote mismatch (used CLOSED_HI_HAT/42 instead of PEDAL_HI_HAT/44, which didn't match my own "pedal hi-hat" description), a claim that the MIDI exporter's step-spacing logic was wrong for Jazz's rhythm, and a nitpick suggesting a playback test.
+- 2026-11-08: Fixed the midiNote mismatch in d45a529 and pushed. Verified the exporter claim myself by reading `midi-exporter.service.ts`: it's a real, pre-existing bug (a hardcoded tick-per-step assumption that only works for 4-subdivision beats), not something my PR introduces -- it would already affect `psytrance-ternary.json`'s export today. Since fixing it needs a code change outside this PR's data-only scope, I replied on the thread explaining the finding, fixing what was mine to fix, and asking Babali42 whether they'd want the exporter fix in this PR or a separate one. Declined to add the suggested playback test myself and left that as the maintainer's call, since no existing spec tests genre-specific content.
 
-**Status:** Awaiting review
+**Status:** Awaiting review (human maintainer Babali42 hasn't weighed in yet; only the automated reviewer has)
 
 **Toolkit**
 
