@@ -11,7 +11,7 @@ files and no evidence uploads are part of Assignment 5.
 **Student:** Rafia Tasafi
 **GitHub Username:** rafiatasafi
 **Issue:** https://github.com/Babali42/DrumBeatRepo/issues/270
-**Pull Request:** [not yet opened]
+**Pull Request:** https://github.com/Babali42/DrumBeatRepo/pull/635
 
 One repository, built across units 5 to 8, telling the whole story of your real
 contribution. Fill it as you work, not at the end — the sections below ask for evidence that
@@ -384,27 +384,22 @@ together, for the same root cause (sbt not installed locally).
 
 ## Pull Request
 
-**PR Link:** [GitHub PR URL when opened]
+**PR Link:** https://github.com/Babali42/DrumBeatRepo/pull/635
 
-**PR Description:** [what the PR says; much of the content above
-adapts into it]
+**PR Description:** Explains the Jazz beat addition (data-only, no code changes), the 12-step triplet grid design, the disclosed ebm/open-hihat.wav ride substitution (with the unanswered question to the maintainer about it), before/after grep + JSON-parse evidence, which repo checks passed (lint, vitest, i18n) with their actual output pasted, which were skipped and why (Scala/Karma need sbt, not installed locally), and an AI-use disclosure section naming what Claude Code helped with versus what was my own call (genre, pattern design, ride substitution).
 
 **Maintainer Feedback:**
 
-- [Date]: [feedback received, or "none yet"; silence is a normal
-  state and costs you nothing]
-- [Date]: [how you addressed it]
+- 2026-11-08: none yet (just opened)
 
-**Status:** [Awaiting review / Iterating / Merged / Closed. The
-status is a fact you record, never a grade: the PR is graded as
-opened.]
+**Status:** Awaiting review
 
 **Toolkit**
 
-- Tool:
-- What it produced:
-- Difficulties:
-- What changed:
+- Tool: ship-gate (repo checks + pr-precheck in live mode), run before opening the PR
+- What it produced: an initial pass on all 4 repo checks (install, lint, vitest, i18n) and all 7 pr-precheck checks, plus 6 non-blocking notes -- `Fixes #270` would wrongly auto-close a standing issue, the `node -e` evidence command didn't actually print anything despite the claimed output, the lint/test results lived only in a private file instead of the PR description, and two voice-guide tone notes.
+- Difficulties: the gate passed cleanly, but its notes caught real problems a passing grade didn't require me to fix -- I fixed all of them anyway (Fixes to Refs, made the node command's output honest, pasted real check output into the description, softened an overclaimed "authentic" to "aiming for") before opening the PR, since a passing grade isn't the same as an honest PR.
+- What changed: `pr_draft.md` was revised in place after the gate's notes, then used as-is for `gh pr create`. I also removed a generated-by-AI attribution line my local Claude Code appended on its own when it ran the create command, since I hadn't asked for that line and it wasn't something I was attesting to -- I kept the "What AI helped with" disclosure section itself, since that content is mine and relevant.
 
 ---
 
