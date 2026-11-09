@@ -58,11 +58,9 @@ one in the week it belongs to.
 
 I renamed issue-select to issue-scout, replaced its sandbox scope with my real-world fit profile (Python/Flask, Next.js/React Native, Supabase -- avoiding CI/DevOps work), and wrote search-strategy.md with five gh search issues queries plus ranking filters (drop assigned/stale candidates, order by fewest comments first). My first scan graded 5 candidates and caught a real rubric bug: not-already-claimed was passing issues where a linked PR had already merged the requested work, because my pass condition only checked for open PRs and assignees, not merged ones. I rewrote the check to also fail on a merged PR and logged the fix with a dated entry in scan-notes.md, then confirmed it held up when re-grading DrumBeatRepo#270 -- the scout correctly flagged it with a tension (a standing "not meant to be closed" issue) instead of a false accept.
 
-**Unit 6: [one line on the tool work]**
+**Unit 6: Installed the voice guard's Upstream rules and wrote a CLAUDE.local.md memory file for my DrumBeatRepo clone.**
 
-[2-4 sentences: the voice-guard, the repo-memory file. What broke or
-fell short, and what changed because of it. "Nothing broke" counts when
-it is true - say how you know.]
+I merged my three carry-over voice guides into one canonical file, wrote claims/questions/pings rules, and wired the guard as a global PreToolUse hook -- the wiring test passed cleanly on the first try (`gh issue comment --help` got blocked as expected, with no body for the guard to read). The repo-memory file took two passes: my first scoped-orientation prompt, aimed only at the TypeScript assets and domain folders, came back empty because the actual beat-loading logic lives in the Scala engine, not the TypeScript frontend. Widening the search to grep for `beats-metadata` and `domain/beat` imports found the real pipeline (`BeatLibrary.scala` / `HttpBeatLoader.scala` -> `sequencer.service.ts`). That orientation also surfaced the most useful fact for my plan: adding a genre is pure data, with no code path or allowlist to touch, which is what let me scope CLAUDE.local.md down to a few lines instead of the whole sequencer bridge.
 
 **Unit 7: [one line on the tool work]**
 
