@@ -122,31 +122,89 @@ Claim comment: https://github.com/Babali42/DrumBeatRepo/issues/270#issuecomment-
 
 **Environment Setup**
 
-[What a stranger would need to stand this up: your operating system,
-the relevant versions (language, runtime, package manager, the project
-itself), and how you set the project up. Then the challenges you faced
-and how you solved them, or that none came up.]
+macOS 14.6, arm64, Node v24.21.0, npm 11.19.0. Cloned my fork
+(rafiatasafi/DrumBeatRepo), added `upstream` pointing at
+Babali42/DrumBeatRepo, and fast-forwarded to upstream/main
+(97e7644...) so my clone has no local drift. sbt/Scala wasn't
+installed and isn't needed for this change: it's pure data (a JSON
+beat file plus a metadata entry) -- `BeatLibrary.scala` and
+`HttpBeatLoader.scala` have no genre allowlist or switch statement, so
+any metadata entry with a matching JSON file loads automatically.
 
 **Steps to Reproduce**
 
-1. [Step 1]
-2. [Step 2]
-3. [Observed result]
+Issue #270 is a standing "how to add a beat" contribution guide, not a
+bug report -- it describes no symptom and never mentions Jazz. So
+this isn't a reproduction in the usual sense, it's a gap confirmation
+on current main before building:
+
+1. `grep -i jazz frontend/src/assets/beats/beats-metadata.json`
+2. `find frontend/src/assets -type f \( -iname "*.mp3" -o -iname "*.wav" -o -iname "*.ogg" \) | sort`
+3. Observed result: the grep returns nothing (no Jazz entry exists in
+   the catalog), and the find lists samples across 12 genre folders
+   but none under a `jazz/` folder, and no literal ride-cymbal sample
+   anywhere in the repo.
 
 **Reproduction Evidence**
 
-- **Commit showing reproduction:** [link to commit in your fork]
-- **Screenshots/logs:** [if applicable]
-- **My findings:** [what you discovered during reproduction; an
-  honest, evidenced cannot-reproduce that led you to re-pick or ask
-  the maintainer belongs here and costs you nothing]
+- **Commit showing reproduction:** none -- this is a gap confirmation
+  against current `main`, not a code diff, so the command output below
+  is the evidence rather than a commit.
+- **Screenshots/logs:**
+
+~~~text
+$ grep -i jazz frontend/src/assets/beats/beats-metadata.json
+(no output)
+
+$ find frontend/src/assets -type f \( -iname "*.mp3" -o -iname "*.wav" -o -iname "*.ogg" \) | sort
+frontend/src/assets/sounds/drum-n-bass/{{hat,kick,snare}}.wav
+frontend/src/assets/sounds/dub/{{arpeggio_si,bass,closed-hat,kick,skank,snare,sub}}.wav
+frontend/src/assets/sounds/ebm/{{clap,closed-hihat,kick,open-hihat,snare}}.wav
+frontend/src/assets/sounds/gabber/{{clap,crash,kick,open-hihat}}.wav
+frontend/src/assets/sounds/hypnotic-techno/{{bass,kick,synth}}.mp3
+frontend/src/assets/sounds/jersey-club/{{kick,snare,squeak_high,squeak_low}}.mp3
+frontend/src/assets/sounds/jul/tom.mp3
+frontend/src/assets/sounds/metal/{{crash,hat,kick,snare}}.{{mp3,wav}}
+frontend/src/assets/sounds/psytrance/{{bass,closed-hat,kick,open-hat,snare}}.wav
+frontend/src/assets/sounds/techno/{{hat,kick,snare}}.wav
+frontend/src/assets/sounds/trap/{{hat,kick,snare}}.mp3
+(47 files total, 12 genre folders, no jazz/ folder, no ride-cymbal sample)
+~~~
+
+- **My findings:** the gap is real -- no Jazz beat is registered
+  anywhere, and the repo has no literal ride-cymbal sample at all. The
+  closest substitutes are an open hi-hat (`ebm/open-hihat.wav`,
+  `gabber/open-hihat.wav`, `psytrance/open-hat.wav`) or a crash
+  (`metal/crash.*`, `gabber/crash.wav`). An open hi-hat is the closer
+  substitute for a ride's sustained, swung feel than a crash, so
+  that's what I'm using -- disclosed as a substitution in my PR
+  description rather than claimed as an authentic ride sound.
 
 **Toolkit**
 
-- Tool:
-- What it produced:
-- Difficulties:
-- What changed:
+- Tool: repro-check, grading my claim comment and this gap-confirmation
+  report together
+- What it produced: an initial reject on three checks -- no recorded
+  environment, an overclaimed "the gap the issue describes" when the
+  issue actually describes no bug, and a boilerplate first claim
+  comment ("the list above" cited a list that doesn't exist in the
+  issue). After I fixed all three (real environment info, reframed as
+  a gap confirmation, and a specific follow-up claim comment naming my
+  first step), it came back accept.
+- Difficulties: my first claim comment got posted before I ran it
+  through this skill at all, which broke my own voice guide's "run
+  everything through the skill first" rule -- repro-check caught it
+  retroactively and I had to fix it with a follow-up rather than an
+  edit. It also caught that I'd cited `CLAUDE.local.md`, a private
+  uncommitted file, as evidence -- no stranger reading my PR could
+  check that, so I replaced it with the two source files that back
+  the same claim.
+- What changed: reframed the report as a gap confirmation instead of a
+  bug repro, added real environment fields, broadened the sample
+  search from `*.mp3` only to every audio extension the repo uses, and
+  posted a second, specific claim comment (itself caught once by the
+  voice guard for promising "I'll report back... within the next few
+  days," which I softened to not name a date).
 
 ---
 
