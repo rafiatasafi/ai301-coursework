@@ -66,10 +66,9 @@ I merged my three carry-over voice guides into one canonical file, wrote claims/
 
 Installed the ship-gate hook and wrote `ship-manifest.md` by reverse-engineering the repo's actual CI (the three composite GitHub Actions plus the i18n bash script), splitting checks into must-pass (lint, vitest, i18n) versus excluded (Scala/Karma, both blocked by not having sbt installed locally). Running the gate against my real branch passed all 4 repo checks and all 7 pr-precheck checks, but its 6 non-blocking notes still caught real problems -- a `Fixes #270` that would have wrongly auto-closed a standing issue, an evidence command that didn't actually print what I claimed, check output that lived only in a private file instead of the PR description, and an overclaimed "authentic" feel I hadn't verified by ear. I fixed all of them before opening PR #635, since the gate passing isn't the same bar as the PR being honest.
 
-**Unit 8: [one line on the tool work]**
+**Unit 8: Ran the PR monitor, verified its draft before posting it**
 
-[2-4 sentences: the PR-monitor and your playbook. What it read, what it
-drafted, what you did with the draft.]
+Wrote my playbook by checking 5 recent merged PRs from outside contributors (CONTRIBUTING.md doesn't exist); most merge within hours, but the one directly comparable genre-addition PR (#589, Bossa Nova) took almost two days, which set my nudge threshold. The monitor read PR #635's state (CodeRabbit had already left 2 comments and a nitpick) and drafted a reply answering all three. The draft was careful but hedged on the exporter bug ("I won't call it a bug yet") -- I'd actually already traced the real cause myself, so I rewrote that paragraph with the concrete evidence instead of the draft's uncertainty, confirmed the branch wasn't stale against an already-merged genre (a risk the draft flagged but didn't resolve), and posted my own version through Claude Code so the voice guard checked it before anything went out.
 
 ---
 
