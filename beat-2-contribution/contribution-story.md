@@ -406,25 +406,22 @@ together, for the same root cause (sbt not installed locally).
 
 **Technical Skills Gained**
 
-[What you learned technically, named concretely.]
+Reading an unfamiliar codebase by tracing data flow instead of guessing: I found that DrumBeatRepo splits beat loading between a Scala/Scala.js engine (`BeatLibrary.scala`, `HttpBeatLoader.scala`) and an Angular frontend, and that a genre is pure catalog data with no code-level allowlist -- which is what let me scope this contribution to two JSON files with no code changes. I also learned the General MIDI percussion map well enough to catch my own mistake (midiNote 42 is CLOSED_HI_HAT, 44 is PEDAL_HI_HAT), and how to reverse-engineer a repo's real CI (three composite GitHub Actions plus a bash i18n script) instead of guessing what "passing checks" means. I also got real practice reading and verifying an automated review bot's claims against actual source instead of taking them on faith or dismissing them outright.
 
 **Challenges Overcome**
 
-[What was hard and how you solved it; point at the real events, the
-Toolkit blocks above are full of them.]
+The hardest moments were all places a tool told me something was wrong and I had to decide whether the tool or my work was the problem. `issue-scout`'s `not-already-claimed` check flagged my own successful claim comment as a competing claim -- I traced it to a real missing exemption in the rubric and fixed the rubric rather than my claim. `repro-check` rejected my first reproduction report on three real grounds (no environment recorded, an overclaimed "bug" on a feature request, a boilerplate claim comment), and I fixed all three with real content instead of asking the grader to look away. A `json.dump()` call silently reformatted an entire JSON file's indentation, turning a one-line change into a 280-line diff -- caught only because I checked `git show --stat` before pushing, which is now a habit. And when CodeRabbit flagged a "MIDI exporter bug," I didn't assume the bot was right or wrong -- I read the exporter's actual tick-spacing code myself and confirmed it was real, pre-existing, and out of this PR's scope.
 
 **What I'd Do Differently Next Time**
 
-[Reflection on your process.]
+I'd run my claim comment through the voice guard before posting it, not after -- posting first and fixing with a follow-up worked, but it cost an extra round trip and a slightly awkward thread. I'd also budget time to install `sbt` early in the week so Scala and Karma tests could actually run locally, instead of discovering partway through that both were blocked by the same missing toolchain and having to document that limitation instead of closing it.
 
 ---
 
 ## Resources Used
 
-[What actually helped, not a reading list. List things this story
-already shows you using: the doc you followed to set the environment
-up, the thread that explained the bug, the person who answered you.
-One real entry beats ten plausible ones.]
-
-- [Link to documentation that helped]
-- [Discussion, issue, or post that helped]
+- DrumBeatRepo's own `.github/workflows/*.yml` and `verify_i18n_json.sh` -- read directly to build an accurate `ship-manifest.md` instead of guessing what CI checks for.
+- `frontend/src/app/domain/drums/midi-drum-type.ts` -- the repo's own General MIDI drum-type enum, which is what let me catch and fix my own midiNote mismatch.
+- `frontend/src/assets/beats/psytrance-ternary.json` -- an existing beat in the repo using `subdivisionsPerBeat: 3`, which was the precedent that justified my own triplet-grid approach.
+- The maintainer's (Babali42) reply on issue #270 ("Oh yes, it's a great idea!") -- the only direction available, which I built the whole plan around rather than inventing requirements.
+- `gh pr list --state merged --json ...` against this repo's own history -- real data (5 recent outside-contributor PRs, especially #589's ~1.9-day wait on a comparable genre-addition PR) instead of a guessed staleness threshold for my playbook.
