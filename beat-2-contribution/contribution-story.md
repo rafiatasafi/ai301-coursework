@@ -62,10 +62,9 @@ I renamed issue-select to issue-scout, replaced its sandbox scope with my real-w
 
 I merged my three carry-over voice guides into one canonical file, wrote claims/questions/pings rules, and wired the guard as a global PreToolUse hook -- the wiring test passed cleanly on the first try (`gh issue comment --help` got blocked as expected, with no body for the guard to read). The repo-memory file took two passes: my first scoped-orientation prompt, aimed only at the TypeScript assets and domain folders, came back empty because the actual beat-loading logic lives in the Scala engine, not the TypeScript frontend. Widening the search to grep for `beats-metadata` and `domain/beat` imports found the real pipeline (`BeatLibrary.scala` / `HttpBeatLoader.scala` -> `sequencer.service.ts`). That orientation also surfaced the most useful fact for my plan: adding a genre is pure data, with no code path or allowlist to touch, which is what let me scope CLAUDE.local.md down to a few lines instead of the whole sequencer bridge.
 
-**Unit 7: [one line on the tool work]**
+**Unit 7: Built and verified the ship-gate, then opened the real PR**
 
-[2-4 sentences: the ship-gate and your gate manifest. What it produced
-on your real branch, what fought you, what changed because of it.]
+Installed the ship-gate hook and wrote `ship-manifest.md` by reverse-engineering the repo's actual CI (the three composite GitHub Actions plus the i18n bash script), splitting checks into must-pass (lint, vitest, i18n) versus excluded (Scala/Karma, both blocked by not having sbt installed locally). Running the gate against my real branch passed all 4 repo checks and all 7 pr-precheck checks, but its 6 non-blocking notes still caught real problems -- a `Fixes #270` that would have wrongly auto-closed a standing issue, an evidence command that didn't actually print what I claimed, check output that lived only in a private file instead of the PR description, and an overclaimed "authentic" feel I hadn't verified by ear. I fixed all of them before opening PR #635, since the gate passing isn't the same bar as the PR being honest.
 
 **Unit 8: [one line on the tool work]**
 
