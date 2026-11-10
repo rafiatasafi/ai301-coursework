@@ -11,7 +11,7 @@ files and no evidence uploads are part of Assignment 5.
 **Student:** Rafia Tasafi
 **GitHub Username:** rafiatasafi
 **Issue:** https://github.com/Babali42/DrumBeatRepo/issues/270
-**Pull Request:** https://github.com/Babali42/DrumBeatRepo/pull/635
+**Pull Request:** https://github.com/Babali42/DrumBeatRepo/pull/635 (merged)
 
 One repository, built across units 5 to 8, telling the whole story of your real
 contribution. Fill it as you work, not at the end — the sections below ask for evidence that
@@ -391,7 +391,11 @@ together, for the same root cause (sbt not installed locally).
 - 2026-11-08: CodeRabbit (automated review bot) left 2 inline comments and 1 nitpick on the first commit (c7e8a516): a Hi-Hat midiNote mismatch (used CLOSED_HI_HAT/42 instead of PEDAL_HI_HAT/44, which didn't match my own "pedal hi-hat" description), a claim that the MIDI exporter's step-spacing logic was wrong for Jazz's rhythm, and a nitpick suggesting a playback test.
 - 2026-11-08: Fixed the midiNote mismatch in d45a529 and pushed. Verified the exporter claim myself by reading `midi-exporter.service.ts`: it's a real, pre-existing bug (a hardcoded tick-per-step assumption that only works for 4-subdivision beats), not something my PR introduces -- it would already affect `psytrance-ternary.json`'s export today. Since fixing it needs a code change outside this PR's data-only scope, I replied on the thread explaining the finding, fixing what was mine to fix, and asking Babali42 whether they'd want the exporter fix in this PR or a separate one. Declined to add the suggested playback test myself and left that as the maintainer's call, since no existing spec tests genre-specific content.
 
-**Status:** Awaiting review (human maintainer Babali42 hasn't weighed in yet; only the automated reviewer has)
+- 2026-11-09: Babali42 requested changes: "I tried the beat, it's great, I think those two acoustic drums can add a great texture. Feel free to try it and answer me if it is good for you." He'd also suggested (on the issue thread) opening a GitHub Codespace, since I'd disclosed never hearing the beat play, and flagged a possible concern about the trap kick being too loud/punchy next to an acoustic mix.
+- 2026-11-10: Opened a GitHub Codespace on my fork/branch and actually listened to Jazz for the first time -- closing the sbt/playback gap I'd disclosed since Unit 7. Tried his two suggested acoustic samples, but preferred my original hi-hat and kick: the originals kept more of the swung jazz groove I was aiming for, and the suggested samples lost it. Replied explaining that and asking if he had another kick suggestion that might preserve the feel, rather than silently reverting without explanation.
+- 2026-11-10: Babali42 approved and merged the PR, clarifying that the trap kick's punch (being a drum-machine sample) actually works well as contrast against the metal kick's more acoustic character -- so no change was needed after all. He also opened a follow-up PR (#637) crediting me via all-contributors for "music and demo."
+
+**Status:** Merged
 
 **Toolkit**
 
